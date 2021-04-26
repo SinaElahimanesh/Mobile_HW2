@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bookmarks"
+        android:enabled="true"
+        android:icon="@drawable/bookmark_icon"
+        android:title="@string/bookmark_label"/>
+    <item
+        android:id="@+id/maps"
+        android:enabled="true"
+        android:icon="@drawable/map_icon"
+        android:title="@string/map_label"/>
+
+    <item
+        android:id="@+id/settings"
+        android:enabled="true"
+        android:icon="@drawable/settings_icon"
+        android:title="@string/settings_label"/>
+</menu>

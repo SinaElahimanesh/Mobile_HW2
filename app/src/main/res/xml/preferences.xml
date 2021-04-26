@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Settings">
+        <SwitchPreferenceCompat
+            android:key="dark_mode"
+            app:title="Dark Mode"
+            android:summary="Toggle Dark Mode"/>
+
+        <Preference
+            android:key="delete_data"
+            app:title="Delete Data"
+            android:summary="Delete App Data From Phone"/>
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

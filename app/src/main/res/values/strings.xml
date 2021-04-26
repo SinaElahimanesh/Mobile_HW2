@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Mobile_HW2</string>
+    <string name="bookmark_label">Bookmark</string>
+    <string name="map_label">Map</string>
+    <string name="settings_label">Settings</string>
+
+    <string name="mapbox_access_token">pk.eyJ1Ijoic2luYWVsYWhpbWFuZXNoIiwiYSI6ImNrN3RkeDh4ZTBxbnkzbnB1Y2FnZmE1cG8ifQ.eHBYvKOXzAWjR08kYCGVHw</string>
+</resources>
