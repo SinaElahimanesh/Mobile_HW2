@@ -1,7 +1,5 @@
 # Mobile_HW2
 
-
-
 |Name       |Student Num. |
 |:----------|:-----------:|
 |*Sina Elahimanesh*|98101169|
