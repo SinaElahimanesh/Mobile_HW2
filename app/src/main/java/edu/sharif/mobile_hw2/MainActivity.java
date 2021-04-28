@@ -3,6 +3,7 @@ package edu.sharif.mobile_hw2;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private DataBaseHelper dbHelper;
     protected SQLiteDatabase db;
 
+    private ConstraintLayout mapContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         changeAppThem(this, "dark_mode");
         SettingsFragment.setContext(this);
         MapFragment.setContext(this);
+
+        mapContainer = findViewById(R.id.mapContainer);
 
         // Permissions
         try {
@@ -61,12 +66,18 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.bookmarks:
+                        removeAllFragments();
+                        mapContainer.setVisibility(View.INVISIBLE);
                         loadFragment(new BookmarkFragment());
                         break;
                     case R.id.maps:
-                        loadFragment(new MapFragment());
+                        removeAllFragments();
+                        mapContainer.setVisibility(View.VISIBLE);
+//                        loadFragment(new MapFragment());
                         break;
                     case R.id.settings:
+                        removeAllFragments();
+                        mapContainer.setVisibility(View.INVISIBLE);
                         loadFragment(new SettingsFragment());
                         break;
                 }
@@ -90,6 +101,12 @@ public class MainActivity extends AppCompatActivity {
         long newRowId = db.insert(DataBaseContract.DataBaseEntry.TABLE_NAME, null, values);
     }
 
+
+    private void removeAllFragments() {
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+    }
 
     private boolean loadFragment(Fragment fragment) {
         //switching fragment
