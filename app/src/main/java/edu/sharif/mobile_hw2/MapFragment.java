@@ -267,7 +267,7 @@ public class MapFragment extends Fragment implements GPSCallback {
             }
         });
 
-        MainActivity.setSearchText(searchText);
+//        MainActivity.setSearchText(searchText);
     }
 
 
