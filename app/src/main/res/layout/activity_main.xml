@@ -89,7 +89,7 @@
             android:paddingTop="28dp"
             android:paddingRight="10dp"
             android:src="@drawable/current_location"
-            android:text="20km/h"
+            android:text="0 km/h"
             android:textColor="#ffffff"
             android:textSize="19sp"
             android:layout_marginLeft="20dp"
