@@ -10,18 +10,23 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -29,7 +34,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapEventsReceiver;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Marker;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -61,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
     @Override
     protected void onResume() {
         super.onResume();
-
+        map.onResume();
         voiceSearch();
 
         txtview=(TextView) findViewById(R.id.speedt);
@@ -138,6 +153,70 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
                 }
             }
         });
+
+
+
+
+
+
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 30000, 10, mLocationListener);
+
+
+        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
+        loadingGif = findViewById(R.id.mapLoad);
+        Glide.with(this).load(R.drawable.loading).into(loadingGif);
+        map = (MapView) findViewById(R.id.map);
+        map.setTileSource(TileSourceFactory.MAPNIK);
+        map.setVisibility(View.INVISIBLE);
+        requestPermissionsIfNecessary(new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        });
+        map.setMultiTouchControls(true);
+        mapController = map.getController();
+        mapController.setZoom(18);
+
+        MapEventsReceiver mReceive = new MapEventsReceiver() {
+            @Override
+            public boolean singleTapConfirmedHelper(GeoPoint p) {
+                return false;
+            }
+
+            @Override
+            public boolean longPressHelper(GeoPoint p) {
+                LayoutInflater layoutinflater = LayoutInflater.from(MainActivity.this);
+                View promptUserView = layoutinflater.inflate(R.layout.user_input_dialog, null);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                alertDialogBuilder.setView(promptUserView);
+                alertDialogBuilder.setTitle("What Do you want to call this location?");
+                final EditText locationName = promptUserView.findViewById(R.id.locationName);
+                alertDialogBuilder.setPositiveButton("Create",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if(locationName.getText().toString().isEmpty()){
+                            Toast.makeText(MainActivity.this,"please enter a name for your location",Toast.LENGTH_LONG).show();
+                        }else {
+                            addMarkerToMap(p,locationName.getText().toString());
+                        }
+                    }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+                return false;
+            }
+        };
+        MapEventsOverlay OverlayEvents = new MapEventsOverlay(getBaseContext(), mReceive);
+        map.getOverlays().add(OverlayEvents);
     }
 
     private void insertDB(String placeName, double latitude, double longitude) {
@@ -286,5 +365,120 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         BigDecimal bd = new BigDecimal(unrounded);
         BigDecimal rounded = bd.setScale(precision, roundingMode);
         return rounded.doubleValue();
+    }
+
+
+
+
+    /////map
+
+
+    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
+    private MapView map = null;
+    IMapController mapController;
+    static Location location;
+    ImageView loadingGif;
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        map.onPause();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        ArrayList<String> permissionsToRequest = new ArrayList<>();
+        for (int i = 0; i < grantResults.length; i++) {
+            permissionsToRequest.add(permissions[i]);
+        }
+        if (permissionsToRequest.size() > 0) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    permissionsToRequest.toArray(new String[0]),
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
+    }
+
+    private void requestPermissionsIfNecessary(String[] permissions) {
+        ArrayList<String> permissionsToRequest = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission);
+            }
+        }
+        if (permissionsToRequest.size() > 0) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    permissionsToRequest.toArray(new String[0]),
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
+
+
+    }
+
+
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(final Location location) {
+            GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+            mapController.setCenter(startPoint);
+            setIcon(startPoint);
+            MainActivity.location=location;
+            map.setVisibility(View.VISIBLE);
+            loadingGif.setVisibility(View.INVISIBLE);
+        }
+        Marker startMarker;
+        public void setIcon(GeoPoint startPoint){
+            map.getOverlays().remove(startMarker);
+            startMarker = new Marker(map);
+            startMarker.setIcon(getDrawable(R.drawable.marker_default));
+            startMarker.setPosition(startPoint);
+            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            startMarker.setTitle("this is your current location");
+            map.getOverlays().add(startMarker);
+        }
+
+
+    };
+
+    public void currentLocation(View view) {
+        if(location == null) return;
+        GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+        mapController.setCenter(startPoint);
+    }
+
+    public void addMarkerToMap(GeoPoint point,String title){
+        Marker marker = new Marker(map);
+        marker.setPosition(point);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        marker.setTitle(title);
+        marker.showInfoWindow();
+        map.getOverlays().add(marker);
+        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Select your answer.");
+                builder.setMessage("Are you you want to delete this marker?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        marker.setVisible(false);
+                        mapView.getOverlays().remove(marker);
+
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return false;
+            }
+        });
     }
 }

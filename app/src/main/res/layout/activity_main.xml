@@ -23,12 +23,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <org.osmdroid.views.MapView
+            android:id="@+id/map"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"></org.osmdroid.views.MapView>
+
         <RelativeLayout
-            android:layout_marginRight="28dp"
-            android:layout_marginLeft="28dp"
-            android:layout_marginTop="25dp"
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="58dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="28dp"
             android:background="@drawable/edit_text_background"
             android:orientation="horizontal"
             android:paddingLeft="12dp"
@@ -50,6 +59,7 @@
                 android:id="@+id/searchText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
@@ -97,7 +107,35 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/current_location"
+            android:onClick="currentLocation"
+            android:src="@drawable/current_location"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/mapLoad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

@@ -34,22 +34,8 @@ import edu.sharif.mobile_hw2.speed_calculator.GPSManager;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 
 import com.bumptech.glide.Glide;
@@ -62,12 +48,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
-
-
-
-import java.util.ArrayList;
-
-import static android.view.GestureDetector.*;
 
 
 
