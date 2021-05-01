@@ -63,6 +63,7 @@ public class SearchPlacesActivity extends AppCompatActivity implements SearchVie
 //                intent.putExtra("lon", item.getLongitude());
                 MainActivity.setSearchLatitude(item.getLatitude());
                 MainActivity.setSearchLongitude(item.getLongitude());
+                MainActivity.setSearchTitle(text);
                 startActivity(intent);
             }
         });
@@ -103,10 +104,11 @@ public class SearchPlacesActivity extends AppCompatActivity implements SearchVie
     }
 
     Thread requestThread;
+    String text = "Unknown";
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String text = newText.trim();
+        text = newText.trim();
         if (text.length() > 0) {
             progressBar.setVisibility(View.VISIBLE);
             if(requestThread != null)
