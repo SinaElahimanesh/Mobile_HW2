@@ -79,12 +79,12 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         map.onResume();
         voiceSearch();
 
-        txtview=(TextView) findViewById(R.id.speedt);
+        txtview = (TextView) findViewById(R.id.speedt);
         try {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -107,10 +107,10 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
 
         // Permissions
         try {
-            if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -155,11 +155,6 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         });
 
 
-
-
-
-
-
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -201,12 +196,12 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
                 alertDialogBuilder.setView(promptUserView);
                 alertDialogBuilder.setTitle("What Do you want to call this location?");
                 final EditText locationName = promptUserView.findViewById(R.id.locationName);
-                alertDialogBuilder.setPositiveButton("Create",new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if(locationName.getText().toString().isEmpty()){
-                            Toast.makeText(MainActivity.this,"please enter a name for your location",Toast.LENGTH_LONG).show();
-                        }else {
-                            addMarkerToMap(p,locationName.getText().toString());
+                        if (locationName.getText().toString().isEmpty()) {
+                            Toast.makeText(MainActivity.this, "please enter a name for your location", Toast.LENGTH_LONG).show();
+                        } else {
+                            addMarkerToMap(p, locationName.getText().toString());
                         }
                     }
                 });
@@ -256,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
         boolean darkTheme = sharedPreferences.getBoolean(key, false);
-        if(darkTheme) {
+        if (darkTheme) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -286,9 +281,6 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
             }
         }
     }
-
-
-
 
 
     private final int REQ_CODE = 100;
@@ -321,23 +313,21 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
     }
 
 
-
-
     private GPSManager gpsManager = null;
     private double speed = 0.0;
-    Boolean isGPSEnabled=false;
+    Boolean isGPSEnabled = false;
     LocationManager locationManager;
-    double currentSpeed,kmphSpeed;
+    double currentSpeed, kmphSpeed;
     TextView txtview;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void getCurrentSpeed(View view){
+    public void getCurrentSpeed(View view) {
         txtview.setText("R.string.info)");
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         gpsManager = new GPSManager(this);
         isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if(isGPSEnabled) {
+        if (isGPSEnabled) {
             gpsManager.startListening(this);
             gpsManager.setGPSCallback(this);
         } else {
@@ -348,9 +338,9 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
     @Override
     public void onGPSUpdate(Location location) {
         speed = location.getSpeed();
-        currentSpeed = round(speed,3, BigDecimal.ROUND_HALF_UP);
-        kmphSpeed = round((currentSpeed*3.6),3,BigDecimal.ROUND_HALF_UP);
-        txtview.setText(kmphSpeed+"km/h");
+        currentSpeed = round(speed, 3, BigDecimal.ROUND_HALF_UP);
+        kmphSpeed = round((currentSpeed * 3.6), 3, BigDecimal.ROUND_HALF_UP);
+        txtview.setText(kmphSpeed + "km/h");
     }
 
     @Override
@@ -366,8 +356,6 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         BigDecimal rounded = bd.setScale(precision, roundingMode);
         return rounded.doubleValue();
     }
-
-
 
 
     /////map
@@ -425,12 +413,14 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
             GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
             mapController.setCenter(startPoint);
             setIcon(startPoint);
-            MainActivity.location=location;
+            MainActivity.location = location;
             map.setVisibility(View.VISIBLE);
             loadingGif.setVisibility(View.INVISIBLE);
         }
+
         Marker startMarker;
-        public void setIcon(GeoPoint startPoint){
+
+        public void setIcon(GeoPoint startPoint) {
             map.getOverlays().remove(startMarker);
             startMarker = new Marker(map);
             startMarker.setIcon(getDrawable(R.drawable.marker_default));
@@ -444,12 +434,12 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
     };
 
     public void currentLocation(View view) {
-        if(location == null) return;
+        if (location == null) return;
         GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
         mapController.setCenter(startPoint);
     }
 
-    public void addMarkerToMap(GeoPoint point,String title){
+    public void addMarkerToMap(GeoPoint point, String title) {
         Marker marker = new Marker(map);
         marker.setPosition(point);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);

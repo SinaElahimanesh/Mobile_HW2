@@ -30,8 +30,8 @@ public class SearchPlacesActivity extends AppCompatActivity implements SearchVie
     private static ArrayList<SearchPlaces> placesArray = new ArrayList<>();
 
     public static void setPlacesArray(ArrayList<SearchPlaces> placesArray) {
-       SearchPlacesActivity.placesArray.clear();
-       SearchPlacesActivity.placesArray.addAll(placesArray);
+        SearchPlacesActivity.placesArray.clear();
+        SearchPlacesActivity.placesArray.addAll(placesArray);
     }
 
     private Handler handler;
@@ -42,17 +42,17 @@ public class SearchPlacesActivity extends AppCompatActivity implements SearchVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_places);
 
-         progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
 
         // Generate sample data
 
         animalNameList = new String[]{"Lion", "Tiger", "Dog",
                 "Cat", "Tortoise", "Rat", "Elephant", "Fox",
-                "Cow","Donkey","Monkey"};
+                "Cow", "Donkey", "Monkey"};
 
         // Locate the ListView in listview_main.xml
         list = (ListView) findViewById(R.id.listview);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 System.out.println("doneee");
@@ -109,7 +109,7 @@ public class SearchPlacesActivity extends AppCompatActivity implements SearchVie
         String text = newText.trim();
         if (text.length() > 0) {
             progressBar.setVisibility(View.VISIBLE);
-            if(requestThread != null)
+            if (requestThread != null)
                 requestThread.interrupt();
             requestThread = ThreadGenerator.getPlaces(this, newText, adapter, handler);
             requestThread.start();

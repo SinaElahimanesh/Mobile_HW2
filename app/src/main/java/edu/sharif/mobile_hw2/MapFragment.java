@@ -31,6 +31,7 @@ import java.util.ArrayList;
 
 import edu.sharif.mobile_hw2.speed_calculator.GPSCallback;
 import edu.sharif.mobile_hw2.speed_calculator.GPSManager;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -48,7 +49,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
-
 
 
 public class MapFragment extends Fragment implements GPSCallback {
@@ -74,7 +74,6 @@ public class MapFragment extends Fragment implements GPSCallback {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_map, container, false);
@@ -84,12 +83,12 @@ public class MapFragment extends Fragment implements GPSCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         voiceSearch();
 
-        txtview=(TextView) getView().findViewById(R.id.speedt);
+        txtview = (TextView) getView().findViewById(R.id.speedt);
         try {
-            if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(context, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         super.onCreate(savedInstanceState);
@@ -133,12 +132,12 @@ public class MapFragment extends Fragment implements GPSCallback {
                 alertDialogBuilder.setView(promptUserView);
                 alertDialogBuilder.setTitle("What Do you want to call this location?");
                 final EditText locationName = promptUserView.findViewById(R.id.locationName);
-                alertDialogBuilder.setPositiveButton("Create",new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if(locationName.getText().toString().isEmpty()){
-                            Toast.makeText(context,"please enter a name for your location",Toast.LENGTH_LONG).show();
-                        }else {
-                            addMarkerToMap(p,locationName.getText().toString());
+                        if (locationName.getText().toString().isEmpty()) {
+                            Toast.makeText(context, "please enter a name for your location", Toast.LENGTH_LONG).show();
+                        } else {
+                            addMarkerToMap(p, locationName.getText().toString());
                         }
                     }
                 });
@@ -150,8 +149,7 @@ public class MapFragment extends Fragment implements GPSCallback {
         MapEventsOverlay OverlayEvents = new MapEventsOverlay(context, mReceive);
         map.getOverlays().add(OverlayEvents);
 
-}
-
+    }
 
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -161,13 +159,15 @@ public class MapFragment extends Fragment implements GPSCallback {
             mapController.setCenter(startPoint);
             System.out.println(startPoint);
             setIcon(startPoint);
-            MapFragment.location=location;
+            MapFragment.location = location;
             map.setVisibility(View.VISIBLE);
             loadingGif.setVisibility(View.INVISIBLE);
         }
+
         Marker startMarker;
-        public void setIcon(GeoPoint startPoint){
-            if (map!=null) {
+
+        public void setIcon(GeoPoint startPoint) {
+            if (map != null) {
                 map.getOverlays().remove(startMarker);
                 startMarker = new Marker(map);
                 startMarker.setIcon(context.getDrawable(R.drawable.marker_default));
@@ -182,12 +182,12 @@ public class MapFragment extends Fragment implements GPSCallback {
     };
 
     public void currentLocation(View view) {
-        if(location == null) return;
+        if (location == null) return;
         GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
         mapController.setCenter(startPoint);
     }
 
-    public void addMarkerToMap(GeoPoint point,String title){
+    public void addMarkerToMap(GeoPoint point, String title) {
         Marker marker = new Marker(map);
         marker.setPosition(point);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -251,23 +251,21 @@ public class MapFragment extends Fragment implements GPSCallback {
     }
 
 
-
-
     private GPSManager gpsManager = null;
     private double speed = 0.0;
-    Boolean isGPSEnabled=false;
+    Boolean isGPSEnabled = false;
     LocationManager locationManager;
-    double currentSpeed,kmphSpeed;
+    double currentSpeed, kmphSpeed;
     TextView txtview;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void getCurrentSpeed(View view){
+    public void getCurrentSpeed(View view) {
         txtview.setText("R.string.info)");
         locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         gpsManager = new GPSManager(context);
         isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if(isGPSEnabled) {
+        if (isGPSEnabled) {
             gpsManager.startListening(context);
             gpsManager.setGPSCallback(this);
         } else {
@@ -278,9 +276,9 @@ public class MapFragment extends Fragment implements GPSCallback {
     @Override
     public void onGPSUpdate(Location location) {
         speed = location.getSpeed();
-        currentSpeed = round(speed,3, BigDecimal.ROUND_HALF_UP);
-        kmphSpeed = round((currentSpeed*3.6),3,BigDecimal.ROUND_HALF_UP);
-        txtview.setText(kmphSpeed+"km/h");
+        currentSpeed = round(speed, 3, BigDecimal.ROUND_HALF_UP);
+        kmphSpeed = round((currentSpeed * 3.6), 3, BigDecimal.ROUND_HALF_UP);
+        txtview.setText(kmphSpeed + "km/h");
     }
 
     @Override

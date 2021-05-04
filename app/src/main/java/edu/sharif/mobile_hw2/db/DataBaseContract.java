@@ -6,7 +6,8 @@ public final class DataBaseContract {
 
     // To prevent someone from accidentally instantiating the contract class,
     // make the constructor private.
-    private DataBaseContract() {}
+    private DataBaseContract() {
+    }
 
     public static class DataBaseEntry implements BaseColumns {
         public static final String TABLE_NAME = "entry";

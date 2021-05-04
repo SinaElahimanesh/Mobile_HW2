@@ -15,6 +15,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private static Context context;
 
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
@@ -24,7 +25,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     @Override
                     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                         MainActivity.changeAppThem(context, key);
-                    }};
+                    }
+                };
     }
 
     public static void setContext(Context context) {

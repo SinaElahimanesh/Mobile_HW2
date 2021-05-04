@@ -31,7 +31,7 @@ import okhttp3.Response;
 
 public class ThreadGenerator {
 
-    public static Thread getPlaces(Activity activity, String places, ListViewAdapter adapter, Handler handler){
+    public static Thread getPlaces(Activity activity, String places, ListViewAdapter adapter, Handler handler) {
         return new Thread(new Runnable() {
             @Override
             public void run() {
@@ -39,7 +39,7 @@ public class ThreadGenerator {
                 Response response = Requester.getInstance().RequestPlaces(places);
                 System.out.println(response);
                 try {
-                    if(response==null) {
+                    if (response == null) {
                         return;
                     }
                     String placesString = response.body().string();
@@ -47,12 +47,12 @@ public class ThreadGenerator {
 
                     JSONArray jsonArray = new JSONArray(placesString);
                     ArrayList<SearchPlaces> placesArray = new ArrayList<>();
-                    for(int i=0; i<jsonArray.length() ;i++) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject placeObject = jsonArray.getJSONObject(i);
                         String displayName = placeObject.getString("display_name");
                         JSONObject address = placeObject.getJSONObject("address");
                         String country = "Iran";
-                        if(address.has("country")) {
+                        if (address.has("country")) {
                             country = address.getString("country");
                         }
                         double longitude = placeObject.getDouble("lon");
@@ -73,7 +73,7 @@ public class ThreadGenerator {
                         }
 
 
-                        if(country.contains("ایران") || country.contains("Iran") || country.contains("IR")) {
+                        if (country.contains("ایران") || country.contains("Iran") || country.contains("IR")) {
                             placesArray.add(new SearchPlaces(neighbourhood, city, displayName, latitude, longitude));
                         }
                     }
@@ -99,7 +99,6 @@ public class ThreadGenerator {
                     message.what = MessageResult.SUCCESSFUL;
                     message.obj = placesArray;
                     handler.sendMessage(message);
-
 
 
                 } catch (JSONException | IOException e) {
