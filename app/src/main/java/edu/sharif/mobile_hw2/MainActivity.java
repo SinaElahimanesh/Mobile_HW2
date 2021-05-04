@@ -62,8 +62,9 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
     private ConstraintLayout mapContainer;
 //    private EditText searchText;
 
-    private static double searchLatitude;
-    private static double searchLongitude;
+    private static double searchLatitude = 0;
+    private static double searchLongitude = 0;
+    private static String searchTitle;
 
     public static void setSearchLatitude(double searchLatitude) {
         MainActivity.searchLatitude = searchLatitude;
@@ -71,6 +72,10 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
 
     public static void setSearchLongitude(double searchLongitude) {
         MainActivity.searchLongitude = searchLongitude;
+    }
+
+    public static void setSearchTitle(String searchTitle) {
+        MainActivity.searchTitle = searchTitle;
     }
 
     @Override
@@ -91,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
 //        LatLng latLng = new LatLng(searchLatitude, searchLongitude);
 //        addMarker(latLng);
 //        System.out.println("hiiiiii");
+        if(searchLatitude != 0 && searchLongitude != 0) {
+            addMarkerToMap(new GeoPoint(searchLatitude, searchLongitude), searchTitle);
+        }
     }
 
     @Override
