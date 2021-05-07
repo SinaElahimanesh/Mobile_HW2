@@ -100,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
             GeoPoint point = new GeoPoint(searchLatitude, searchLongitude);
             setFocus(point);
             addMarkerToMap(point, searchTitle);
-            dbHelper.addBookmark(new Bookmark(searchTitle, searchLatitude, searchLongitude));
-            Bookmark.addBookmark(new Bookmark(searchTitle, searchLatitude, searchLongitude));
+            dbHelper.addBookmark(new Bookmark(searchTitle, searchLongitude, searchLatitude));
+            Bookmark.addBookmark(new Bookmark(searchTitle, searchLongitude, searchLatitude));
         }
     }
 
@@ -223,8 +223,8 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
                             ////put adding to data base her
                             ////
                             ////
-                            dbHelper.addBookmark(new Bookmark(locationName.getText().toString(), p.getLatitude(), p.getLongitude()));
-                            Bookmark.addBookmark(new Bookmark(locationName.getText().toString(), p.getLatitude(), p.getLongitude()));
+                            dbHelper.addBookmark(new Bookmark(locationName.getText().toString(), p.getLongitude(),  p.getLatitude()));
+                            Bookmark.addBookmark(new Bookmark(locationName.getText().toString(), p.getLongitude(), p.getLatitude()));
                         }
                     }
                 });
