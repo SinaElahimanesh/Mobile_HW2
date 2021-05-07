@@ -45,10 +45,12 @@ public class Bookmark {
         bookmarks.clear();
     }
 
-    public static void addBookmark(Bookmark bookmark) throws Exception{
+    public static void addBookmark(Bookmark bookmark){
         for (Bookmark bookmarkList : bookmarks) {
-            if(bookmarkList.getName().equals(bookmark.getName()))
-                throw new Exception("A bookmark with this name already exists. Please choose another name.");
+            if(bookmarkList.getName().equals(bookmark.getName())) {
+
+            }
+//                throw new Exception("A bookmark with this name already exists. Please choose another name.");
         }
         bookmarks.add(bookmark);
     }
