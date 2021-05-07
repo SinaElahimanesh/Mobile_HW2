@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-import edu.sharif.mobile_hw2.Bookmark;
+import edu.sharif.mobile_hw2.bookmark.Bookmark;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 

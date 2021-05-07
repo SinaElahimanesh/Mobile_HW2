@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 
+import edu.sharif.mobile_hw2.bookmark.Bookmark;
+import edu.sharif.mobile_hw2.bookmark.BookmarkAdapter;
+import edu.sharif.mobile_hw2.bookmark.RecyclerViewClickListener;
 import edu.sharif.mobile_hw2.db.DataBaseHelper;
 
 public class BookmarkFragment extends Fragment {

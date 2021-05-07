@@ -1,6 +1,4 @@
-package edu.sharif.mobile_hw2;
-
-import org.osmdroid.util.GeoPoint;
+package edu.sharif.mobile_hw2.bookmark;
 
 import java.util.ArrayList;
 import java.util.List;

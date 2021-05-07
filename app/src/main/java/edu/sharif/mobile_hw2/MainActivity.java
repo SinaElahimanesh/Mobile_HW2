@@ -26,13 +26,10 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,16 +49,9 @@ import org.osmdroid.views.overlay.Marker;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
+import edu.sharif.mobile_hw2.bookmark.Bookmark;
 import edu.sharif.mobile_hw2.db.DataBaseContract;
 import edu.sharif.mobile_hw2.db.DataBaseHelper;
 import edu.sharif.mobile_hw2.speed_calculator.GPSCallback;
@@ -110,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
             GeoPoint point = new GeoPoint(searchLatitude, searchLongitude);
             setFocus(point);
             addMarkerToMap(point, searchTitle);
+            dbHelper.addBookmark(new Bookmark(searchTitle, searchLatitude, searchLongitude));
         }
     }
 
@@ -231,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
                             ////put adding to data base her
                             ////
                             ////
-                            insertDB(locationName.getText().toString(), p.getLatitude(), p.getLongitude());
+                            dbHelper.addBookmark(new Bookmark(locationName.getText().toString(), p.getLatitude(), p.getLongitude()));
                         }
                     }
                 });
@@ -251,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         map.getOverlays().add(OverlayEvents);
 
         newDB();
-        dbHelper.addBookmark(new Bookmark("iran", 34, 65));
+//        dbHelper.addBookmark(new Bookmark("iran", 34, 65));
         dbHelper.getBookmarks();
         System.out.println(Bookmark.getBookmarks().size());
     }
@@ -261,17 +252,6 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         dbHelper = new DataBaseHelper(this, Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE));
         db = dbHelper.getWritableDatabase();
         db = dbHelper.db;
-    }
-
-    private void insertDB(String placeName, double latitude, double longitude) {
-        // Create a new map of values, where column names are the keys
-        ContentValues values = new ContentValues();
-        values.put(DataBaseContract.DataBaseEntry.PLACE_NAME, placeName);
-        values.put(DataBaseContract.DataBaseEntry.PLACE_LATITUDE, latitude);
-        values.put(DataBaseContract.DataBaseEntry.PLACE_LONGITUDE, longitude);
-
-        // Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert(DataBaseContract.DataBaseEntry.TABLE_NAME, null, values);
     }
 
 
@@ -291,6 +271,11 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
             return true;
         }
         return false;
+    }
+
+    public void goToMap() {
+        removeAllFragments();
+        mapContainer.setVisibility(View.VISIBLE);
     }
 
     public void changeAppThem(Context context, String key, boolean goToSettings) {

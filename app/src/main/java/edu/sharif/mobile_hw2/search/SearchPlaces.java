@@ -1,4 +1,4 @@
-package edu.sharif.mobile_hw2;
+package edu.sharif.mobile_hw2.search;
 
 public class SearchPlaces {
     private String searchPlaceName;

@@ -1,9 +1,7 @@
-package edu.sharif.mobile_hw2;
+package edu.sharif.mobile_hw2.bookmark;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.sharif.mobile_hw2.MainActivity;
+import edu.sharif.mobile_hw2.R;
 
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.BookmarkViewHolder> implements Filterable{
     private static final String TAG = "Filter";
@@ -47,6 +50,15 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
         holder.locationName.setText(bookmark.getName());
         holder.locationLong.setText(String.format("%.3f",bookmark.getLatLong()));
         holder.locationLat.setText(String.format("%.3f",bookmark.getLatLat()));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)context).goToMap();
+                GeoPoint point = new GeoPoint(Double.parseDouble(holder.locationLat.getText().toString()), Double.parseDouble(holder.locationLong.getText().toString()));
+                ((MainActivity)context).addMarkerToMap(point, holder.locationName.toString());
+                ((MainActivity)context).setFocus(point);
+            }
+        });
     }
 
     @Override

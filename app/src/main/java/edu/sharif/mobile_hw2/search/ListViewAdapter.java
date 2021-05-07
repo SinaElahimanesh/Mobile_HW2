@@ -1,4 +1,4 @@
-package edu.sharif.mobile_hw2;
+package edu.sharif.mobile_hw2.search;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.sharif.mobile_hw2.R;
 
 public class ListViewAdapter extends BaseAdapter {
 

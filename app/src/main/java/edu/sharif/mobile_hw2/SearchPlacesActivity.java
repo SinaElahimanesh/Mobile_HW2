@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 import edu.sharif.mobile_hw2.network.MessageResult;
 import edu.sharif.mobile_hw2.network.ThreadGenerator;
+import edu.sharif.mobile_hw2.search.ListViewAdapter;
+import edu.sharif.mobile_hw2.search.SearchPlaces;
 
 public class SearchPlacesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 

@@ -1,18 +1,11 @@
 package edu.sharif.mobile_hw2.network;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 
 import org.json.JSONArray;
@@ -23,9 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import edu.sharif.mobile_hw2.ListViewAdapter;
+import edu.sharif.mobile_hw2.search.ListViewAdapter;
 import edu.sharif.mobile_hw2.R;
-import edu.sharif.mobile_hw2.SearchPlaces;
+import edu.sharif.mobile_hw2.search.SearchPlaces;
 import okhttp3.Response;
 
 
