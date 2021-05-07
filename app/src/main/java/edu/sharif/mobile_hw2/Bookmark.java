@@ -12,14 +12,14 @@ public class Bookmark {
     private double latLat;
     private int ID = 0;
 
-//    static {
-//       bookmarks.add(new Bookmark("title", 12, 34));
-//        bookmarks.add(new Bookmark("tehran", 56, 65));
-//        bookmarks.add(new Bookmark("tehran2", 56, 65));
-//        bookmarks.add(new Bookmark("tehran3", 56, 65));
-//        bookmarks.add(new Bookmark("tehran4", 56, 65));
-//        bookmarks.add(new Bookmark("tehran5", 56, 65));
-//    }
+    static {
+       bookmarks.add(new Bookmark("title", 12, 34));
+        bookmarks.add(new Bookmark("tehran", 56, 65));
+        bookmarks.add(new Bookmark("tehran2", 56, 65));
+        bookmarks.add(new Bookmark("tehran3", 56, 65));
+        bookmarks.add(new Bookmark("tehran4", 56, 65));
+        bookmarks.add(new Bookmark("tehran5", 56, 65));
+    }
 
     public Bookmark(String name, double latLong, double latLat) {
         this.name = name;

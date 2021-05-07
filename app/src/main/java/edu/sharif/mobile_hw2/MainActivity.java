@@ -94,11 +94,8 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
             e.printStackTrace();
         }
 
-//        LatLng latLng = new LatLng(searchLatitude, searchLongitude);
-//        addMarker(latLng);
-//        System.out.println("hiiiiii");
         if(searchLatitude != 0 && searchLongitude != 0) {
-//            addMarkerToMap(new GeoPoint(searchLatitude, searchLongitude), searchTitle);
+            addMarkerToMap(new GeoPoint(searchLatitude, searchLongitude), searchTitle);
         }
     }
 
@@ -129,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Log.d("mido","shigi");
                 switch (item.getItemId()) {
                     case R.id.bookmarks:
                         removeAllFragments();
@@ -139,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
                     case R.id.maps:
                         removeAllFragments();
                         mapContainer.setVisibility(View.VISIBLE);
-//                        loadFragment(new MapFragment());
                         break;
                     case R.id.settings:
                         removeAllFragments();
@@ -207,6 +202,12 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
                 alertDialogBuilder.setView(promptUserView);
                 alertDialogBuilder.setTitle("What Do you want to call this location?");
                 final EditText locationName = promptUserView.findViewById(R.id.locationName);
+                final EditText locationLatitude = promptUserView.findViewById(R.id.latitude);
+                final EditText locationLongitude = promptUserView.findViewById(R.id.longitude);
+                locationLatitude.setText("Latitude: "+p.getLatitude());
+                locationLongitude.setText("Longitude: "+p.getLongitude());
+                locationLatitude.setTextColor(getResources().getColor(R.color.gold));
+                locationLongitude.setTextColor(getResources().getColor(R.color.gold));
                 alertDialogBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (locationName.getText().toString().isEmpty()) {
@@ -462,34 +463,6 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         marker.setTitle(title);
         marker.showInfoWindow();
         map.getOverlays().add(marker);
-        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Select your answer.");
-                builder.setMessage("Are you you want to delete this marker?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        marker.setVisible(false);
-                        mapView.getOverlays().remove(marker);
-
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                return false;
-            }
-        });
     }
 
-    public void clickTest(View view) {
-        System.out.println("kpwksws w s w s w s w s w s  w ");
-        Log.d("gigggiggg","shigi");
-    }
 }
