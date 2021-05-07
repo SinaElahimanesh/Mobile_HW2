@@ -52,6 +52,15 @@ import org.osmdroid.views.overlay.Marker;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import edu.sharif.mobile_hw2.db.DataBaseContract;
 import edu.sharif.mobile_hw2.db.DataBaseHelper;
@@ -60,7 +69,7 @@ import edu.sharif.mobile_hw2.speed_calculator.GPSManager;
 
 public class MainActivity extends AppCompatActivity implements GPSCallback {
 
-    private DataBaseHelper dbHelper;
+    public DataBaseHelper dbHelper;
     protected SQLiteDatabase db;
 
     private ConstraintLayout mapContainer;
@@ -135,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
                     case R.id.bookmarks:
                         removeAllFragments();
                         mapContainer.setVisibility(View.INVISIBLE);
-                        loadFragment(new BookmarkFragment());
+                        loadFragment(new BookmarkFragment(dbHelper));
                         break;
                     case R.id.maps:
                         removeAllFragments();
@@ -222,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
                             ////put adding to data base her
                             ////
                             ////
+                            insertDB(locationName.getText().toString(), p.getLatitude(), p.getLongitude());
                         }
                     }
                 });
@@ -239,13 +249,21 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         };
         MapEventsOverlay OverlayEvents = new MapEventsOverlay(getBaseContext(), mReceive);
         map.getOverlays().add(OverlayEvents);
+
+        newDB();
+        dbHelper.addBookmark(new Bookmark("iran", 34, 65));
+        dbHelper.getBookmarks();
+        System.out.println(Bookmark.getBookmarks().size());
     }
 
-
+    static final int DEFAULT_THREAD_POOL_SIZE = 10;
+    private void newDB() {
+        dbHelper = new DataBaseHelper(this, Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE));
+        db = dbHelper.getWritableDatabase();
+        db = dbHelper.db;
+    }
 
     private void insertDB(String placeName, double latitude, double longitude) {
-        dbHelper = new DataBaseHelper(this);
-        db = dbHelper.getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(DataBaseContract.DataBaseEntry.PLACE_NAME, placeName);
@@ -500,4 +518,7 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         return marker;
     }
 
+    public void delete_bookmark(View view) {
+//        dbHelper.deleteBookmark(view.getParent());
+    }
 }

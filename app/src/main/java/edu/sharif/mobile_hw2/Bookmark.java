@@ -56,6 +56,7 @@ public class Bookmark {
     }
 
     public static void addAllBookmarks(List<Bookmark> bookmarkList){
+        bookmarks.clear();
         bookmarks.addAll(bookmarkList);
     }
 
@@ -63,11 +64,11 @@ public class Bookmark {
         return bookmarks;
     }
 
-    public static void deleteBookmark(Bookmark bookmark) throws Exception{
+    public static void deleteBookmark(Bookmark bookmark) {
         if(bookmarks.contains(bookmark)){
             bookmarks.remove(bookmark);
         }else{
-            throw new Exception("No bookmarks were found");
+//            throw new Exception("No bookmarks were found");
         }
     }
 

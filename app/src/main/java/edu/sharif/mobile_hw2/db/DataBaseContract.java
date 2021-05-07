@@ -10,10 +10,10 @@ public final class DataBaseContract {
     }
 
     public static class DataBaseEntry implements BaseColumns {
-        public static final String TABLE_NAME = "entry";
-        public static final String PLACE_NAME = "name";
-        public static final String PLACE_LATITUDE = "latitude";
-        public static final String PLACE_LONGITUDE = "longitude";
+        public static final String TABLE_NAME = "BOOKMARK_TABLE";
+        public static final String PLACE_NAME = "NAME";
+        public static final String PLACE_LATITUDE = "LAT";
+        public static final String PLACE_LONGITUDE = "LONG";
     }
 
     public static final String SQL_CREATE_ENTRIES =
@@ -22,6 +22,11 @@ public final class DataBaseContract {
                     DataBaseEntry.PLACE_NAME + " TEXT," +
                     DataBaseEntry.PLACE_LATITUDE + " REAL," +
                     DataBaseEntry.PLACE_LONGITUDE + " REAL)";
+
+    final static String a = "CREATE TABLE " + DataBaseEntry.TABLE_NAME + " (" + DataBaseEntry._ID + " INTEGER PRIMARY KEY, "
+            + DataBaseEntry.PLACE_NAME + " TEXT, " +
+            DataBaseEntry.PLACE_LATITUDE + " REAL, " +
+            DataBaseEntry.PLACE_LONGITUDE +  " REAL)";
 
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + DataBaseEntry.TABLE_NAME;

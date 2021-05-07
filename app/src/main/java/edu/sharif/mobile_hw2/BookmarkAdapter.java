@@ -1,10 +1,13 @@
 package edu.sharif.mobile_hw2;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -20,17 +23,21 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
     private static final String TAG = "Filter";
     private List<Bookmark> bookmarks;
     private List<Bookmark> bookmarksFull;
+    public RecyclerViewClickListener clickListener;
+    Context context;
 
-    public BookmarkAdapter(List<Bookmark> bookmarks) {
+    public BookmarkAdapter(List<Bookmark> bookmarks, RecyclerViewClickListener listener, Context context) {
         this.bookmarks = bookmarks;
         bookmarksFull = new ArrayList<>(bookmarks);
+        this.clickListener = listener;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public BookmarkViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_bookmark,parent,false);
-        return new BookmarkViewHolder(view);
+        return new BookmarkViewHolder(view, clickListener);
     }
 
     @SuppressLint("DefaultLocale")
@@ -78,14 +85,25 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
         }
     };
 
-    class BookmarkViewHolder extends RecyclerView.ViewHolder{
+    class BookmarkViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private Button mapBtn;
+        private RecyclerViewClickListener mListener;
 
         private TextView locationName, locationLat, locationLong;
-        public BookmarkViewHolder(@NonNull View itemView) {
+        public BookmarkViewHolder(@NonNull View itemView, RecyclerViewClickListener listener) {
             super(itemView);
+            mapBtn = itemView.findViewById(R.id.trashB);
+            mListener = listener;
+            mapBtn.setOnClickListener(this);
             locationName = itemView.findViewById(R.id.bookmark_name);
             locationLat = itemView.findViewById(R.id.bookmark_lat);
             locationLong = itemView.findViewById(R.id.bookmark_long);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mListener.onClick(v, getAdapterPosition());
         }
     }
 }

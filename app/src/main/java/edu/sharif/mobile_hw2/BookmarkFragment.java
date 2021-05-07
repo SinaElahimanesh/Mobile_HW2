@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 
+import edu.sharif.mobile_hw2.db.DataBaseHelper;
+
 public class BookmarkFragment extends Fragment {
     private boolean firstFlag = true;
     private RecyclerView bookmarksRecyclerView;
@@ -23,15 +25,17 @@ public class BookmarkFragment extends Fragment {
     private FloatingSearchView floatingSearchView;
     private BookmarkAdapter bookmarkAdapter;
 
-    public BookmarkFragment() {
+    DataBaseHelper dataBaseHelper;
+
+    public BookmarkFragment(DataBaseHelper dataBaseHelper) {
         // Required empty public constructor
+        this.dataBaseHelper = dataBaseHelper;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         firstFlag = !firstFlag;
-
     }
 
 
@@ -51,7 +55,16 @@ public class BookmarkFragment extends Fragment {
                 Log.d("tag", "hiiiii");
             }
 //            itemTouchHelper.attachToRecyclerView(bookmarksRecyclerView);
-            bookmarkAdapter = new BookmarkAdapter(Bookmark.getBookmarks());
+            bookmarkAdapter = new BookmarkAdapter(Bookmark.getBookmarks(), new RecyclerViewClickListener() {
+                @Override
+                public void onClick(View view, int position) {
+                    System.out.println(position);
+                    dataBaseHelper.deleteBookmark(Bookmark.getBookmarks().get(position));
+                    Bookmark.deleteBookmark(Bookmark.getBookmarks().get(position));
+                    bookmarkAdapter.notifyDataSetChanged();
+                }
+            }, getContext());
+            bookmarkAdapter.notifyDataSetChanged();
             bookmarksRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),
                     LinearLayoutManager.VERTICAL, false));
             bookmarksRecyclerView.setAdapter(bookmarkAdapter);
