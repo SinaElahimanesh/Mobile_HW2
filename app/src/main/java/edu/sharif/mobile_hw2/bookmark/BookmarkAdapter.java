@@ -54,8 +54,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
             @Override
             public void onClick(View v) {
                 ((MainActivity)context).goToMap();
-                GeoPoint point = new GeoPoint(Double.parseDouble(holder.locationLat.getText().toString()), Double.parseDouble(holder.locationLong.getText().toString()));
-                ((MainActivity)context).addMarkerToMap(point, holder.locationName.toString());
+                GeoPoint point = new GeoPoint(bookmark.getLatLat(), bookmark.getLatLong());
+                ((MainActivity)context).addMarkerToMap(point, bookmark.getName());
                 ((MainActivity)context).setFocus(point);
             }
         });
