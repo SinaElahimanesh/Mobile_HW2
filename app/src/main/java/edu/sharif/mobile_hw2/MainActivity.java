@@ -27,9 +27,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -94,11 +97,10 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
             e.printStackTrace();
         }
 
-//        LatLng latLng = new LatLng(searchLatitude, searchLongitude);
-//        addMarker(latLng);
-//        System.out.println("hiiiiii");
         if(searchLatitude != 0 && searchLongitude != 0) {
-//            addMarkerToMap(new GeoPoint(searchLatitude, searchLongitude), searchTitle);
+            GeoPoint point = new GeoPoint(searchLatitude, searchLongitude);
+            setFocus(point);
+            addMarkerToMap(point, searchTitle);
         }
     }
 
@@ -129,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Log.d("mido","shigi");
                 switch (item.getItemId()) {
                     case R.id.bookmarks:
                         removeAllFragments();
@@ -139,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
                     case R.id.maps:
                         removeAllFragments();
                         mapContainer.setVisibility(View.VISIBLE);
-//                        loadFragment(new MapFragment());
                         break;
                     case R.id.settings:
                         removeAllFragments();
@@ -199,31 +199,49 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
                 return false;
             }
 
+
             @Override
             public boolean longPressHelper(GeoPoint p) {
+                Marker marker = addTemporaryMarkerToMap(p,"");
                 LayoutInflater layoutinflater = LayoutInflater.from(MainActivity.this);
                 View promptUserView = layoutinflater.inflate(R.layout.user_input_dialog, null);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
                 alertDialogBuilder.setView(promptUserView);
-                alertDialogBuilder.setTitle("What Do you want to call this location?");
+                alertDialogBuilder.setTitle("Save Location?");
                 final EditText locationName = promptUserView.findViewById(R.id.locationName);
-                alertDialogBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                final TextView locationLatLong = promptUserView.findViewById(R.id.latlong);
+                locationLatLong.setText("Latitude: "+p.getLatitude()+"\nLongitude: "+p.getLongitude());
+                locationLatLong.setTextColor(getResources().getColor(R.color.gold));
+                alertDialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        marker.remove(map);
                         if (locationName.getText().toString().isEmpty()) {
                             Toast.makeText(MainActivity.this, "please enter a name for your location", Toast.LENGTH_LONG).show();
                         } else {
                             addMarkerToMap(p, locationName.getText().toString());
+                            ////put adding to data base her
+                            ////
+                            ////
                         }
                     }
                 });
+                alertDialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        marker.remove(map);
+                    }
+                });
                 AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.getWindow().setGravity(Gravity.BOTTOM);
                 alertDialog.show();
-                return false;
+                return true;
             }
         };
         MapEventsOverlay OverlayEvents = new MapEventsOverlay(getBaseContext(), mReceive);
         map.getOverlays().add(OverlayEvents);
     }
+
+
 
     private void insertDB(String placeName, double latitude, double longitude) {
         dbHelper = new DataBaseHelper(this);
@@ -445,8 +463,6 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
             startMarker.setTitle("this is your current location");
             map.getOverlays().add(startMarker);
         }
-
-
     };
 
     public void currentLocation(View view) {
@@ -455,41 +471,33 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
         mapController.setCenter(startPoint);
     }
 
+    static Marker lastMarker;
     public void addMarkerToMap(GeoPoint point, String title) {
+        if (lastMarker!=null){
+            lastMarker.remove(map);
+        }
         Marker marker = new Marker(map);
         marker.setPosition(point);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setTitle(title);
         marker.showInfoWindow();
         map.getOverlays().add(marker);
-        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Select your answer.");
-                builder.setMessage("Are you you want to delete this marker?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        marker.setVisible(false);
-                        mapView.getOverlays().remove(marker);
-
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                return false;
-            }
-        });
+        lastMarker = marker;
     }
 
-    public void clickTest(View view) {
-        System.out.println("kpwksws w s w s w s w s w s  w ");
-        Log.d("gigggiggg","shigi");
+    public void setFocus(GeoPoint point){
+        mapController.setCenter(point);
     }
+
+    //do not use this
+    private Marker addTemporaryMarkerToMap(GeoPoint point, String title) {
+        Marker marker = new Marker(map);
+        marker.setPosition(point);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        marker.setTitle(title);
+        marker.showInfoWindow();
+        map.getOverlays().add(marker);
+        return marker;
+    }
+
 }
