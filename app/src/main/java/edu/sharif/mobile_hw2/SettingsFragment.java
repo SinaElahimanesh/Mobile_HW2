@@ -36,11 +36,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 new SharedPreferences.OnSharedPreferenceChangeListener() {
                     @Override
                     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                        if(key=="dark_mode") {
-                            ((MainActivity)context).changeAppThem(context, key, true);
-                        } else if(key=="delete_data") {
-                            //
-                        }
+                        ((MainActivity)context).changeAppThem(context, key, true);
                     }
                 };
     }
