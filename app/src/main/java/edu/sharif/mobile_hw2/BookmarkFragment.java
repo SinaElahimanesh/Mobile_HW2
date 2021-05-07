@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,10 @@ public class BookmarkFragment extends Fragment {
             label.setEnabled(false);
 
             bookmarksRecyclerView = view.findViewById(R.id.bookmarks_recyclerview);
-            itemTouchHelper.attachToRecyclerView(bookmarksRecyclerView);
+            if(itemTouchHelper==null) {
+                Log.d("tag", "hiiiii");
+            }
+//            itemTouchHelper.attachToRecyclerView(bookmarksRecyclerView);
             bookmarkAdapter = new BookmarkAdapter(Bookmark.getBookmarks());
             bookmarksRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),
                     LinearLayoutManager.VERTICAL, false));

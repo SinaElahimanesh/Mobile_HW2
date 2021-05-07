@@ -24,7 +24,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 new SharedPreferences.OnSharedPreferenceChangeListener() {
                     @Override
                     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                        MainActivity.changeAppThem(context, key);
+                        ((MainActivity)context).changeAppThem(context, key, true);
                     }
                 };
     }
