@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
     @Override
     protected void onResume() {
         super.onResume();
-        map.onResume();
+//        map.onResume();
         voiceSearch();
 
         txtview = (TextView) findViewById(R.id.speedt);
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
 //        addMarker(latLng);
 //        System.out.println("hiiiiii");
         if(searchLatitude != 0 && searchLongitude != 0) {
-            addMarkerToMap(new GeoPoint(searchLatitude, searchLongitude), searchTitle);
+//            addMarkerToMap(new GeoPoint(searchLatitude, searchLongitude), searchTitle);
         }
     }
 
@@ -150,76 +150,76 @@ public class MainActivity extends AppCompatActivity implements GPSCallback {
 
 //        insertDB();
 
-        searchText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    Intent intent = new Intent(MainActivity.this, SearchPlacesActivity.class);
-                    startActivity(intent);
-                } else {
-//                    Toast.makeText(getApplicationContext(), "Lost the focus", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 30000, 10, mLocationListener);
-
-
-        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
-        loadingGif = findViewById(R.id.mapLoad);
-        Glide.with(this).load(R.drawable.loading).into(loadingGif);
-        map = (MapView) findViewById(R.id.map);
-        map.setTileSource(TileSourceFactory.MAPNIK);
-        map.setVisibility(View.INVISIBLE);
-        requestPermissionsIfNecessary(new String[]{
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-        });
-        map.setMultiTouchControls(true);
-        mapController = map.getController();
-        mapController.setZoom(18);
-
-        MapEventsReceiver mReceive = new MapEventsReceiver() {
-            @Override
-            public boolean singleTapConfirmedHelper(GeoPoint p) {
-                return false;
-            }
-
-            @Override
-            public boolean longPressHelper(GeoPoint p) {
-                LayoutInflater layoutinflater = LayoutInflater.from(MainActivity.this);
-                View promptUserView = layoutinflater.inflate(R.layout.user_input_dialog, null);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-                alertDialogBuilder.setView(promptUserView);
-                alertDialogBuilder.setTitle("What Do you want to call this location?");
-                final EditText locationName = promptUserView.findViewById(R.id.locationName);
-                alertDialogBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (locationName.getText().toString().isEmpty()) {
-                            Toast.makeText(MainActivity.this, "please enter a name for your location", Toast.LENGTH_LONG).show();
-                        } else {
-                            addMarkerToMap(p, locationName.getText().toString());
-                        }
-                    }
-                });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-                return false;
-            }
-        };
-        MapEventsOverlay OverlayEvents = new MapEventsOverlay(getBaseContext(), mReceive);
-        map.getOverlays().add(OverlayEvents);
+//        searchText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean hasFocus) {
+//                if (hasFocus) {
+//                    Intent intent = new Intent(MainActivity.this, SearchPlacesActivity.class);
+//                    startActivity(intent);
+//                } else {
+////                    Toast.makeText(getApplicationContext(), "Lost the focus", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+//
+//
+//        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 30000, 10, mLocationListener);
+//
+//
+//        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
+//        loadingGif = findViewById(R.id.mapLoad);
+//        Glide.with(this).load(R.drawable.loading).into(loadingGif);
+//        map = (MapView) findViewById(R.id.map);
+//        map.setTileSource(TileSourceFactory.MAPNIK);
+//        map.setVisibility(View.INVISIBLE);
+//        requestPermissionsIfNecessary(new String[]{
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE
+//        });
+//        map.setMultiTouchControls(true);
+//        mapController = map.getController();
+//        mapController.setZoom(18);
+//
+//        MapEventsReceiver mReceive = new MapEventsReceiver() {
+//            @Override
+//            public boolean singleTapConfirmedHelper(GeoPoint p) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean longPressHelper(GeoPoint p) {
+//                LayoutInflater layoutinflater = LayoutInflater.from(MainActivity.this);
+//                View promptUserView = layoutinflater.inflate(R.layout.user_input_dialog, null);
+//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+//                alertDialogBuilder.setView(promptUserView);
+//                alertDialogBuilder.setTitle("What Do you want to call this location?");
+//                final EditText locationName = promptUserView.findViewById(R.id.locationName);
+//                alertDialogBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        if (locationName.getText().toString().isEmpty()) {
+//                            Toast.makeText(MainActivity.this, "please enter a name for your location", Toast.LENGTH_LONG).show();
+//                        } else {
+//                            addMarkerToMap(p, locationName.getText().toString());
+//                        }
+//                    }
+//                });
+//                AlertDialog alertDialog = alertDialogBuilder.create();
+//                alertDialog.show();
+//                return false;
+//            }
+//        };
+//        MapEventsOverlay OverlayEvents = new MapEventsOverlay(getBaseContext(), mReceive);
+//        map.getOverlays().add(OverlayEvents);
     }
 
     private void insertDB(String placeName, double latitude, double longitude) {
